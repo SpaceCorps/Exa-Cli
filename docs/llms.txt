@@ -1,0 +1,75 @@
+# Exa CLI
+
+> A blazing fast native command-line tool and agent interface for the Exa AI search API. Built in Rust for developers and autonomous AI agents.
+
+## When to Use This CLI
+
+Use the `exa` CLI whenever you need to:
+- **Search the web with natural language queries:** Query recent developments, companies, people, news, research papers, and technical blogs.
+- **Extract web content:** Scrape clean, LLM-ready markdown from one or more URLs without managing headless browsers or proxies.
+- **Find similar web pages:** Discover domain-adjacent or content-adjacent pages given an authoritative seed URL.
+- **Get synthesized answers with citations:** Obtain AI-generated answers directly backed by real-time web citations.
+- **Agentic automation:** Drive web search, discovery, and research loops deterministically via `--json` output and stable error exit codes.
+
+Do NOT use this tool if:
+- You need a visual web browser interface (use https://exa.ai).
+- You are trying to search non-web local disk files (use `grep` / `ripgrep`).
+
+## Core Agent Operating Principles
+
+1. **Authentication:** Pass `--account <name>` (`-a <name>`), `--api-key <key>`, or set `EXA_API_KEY`. In multi-account environments, always pass `--account`.
+2. **First-Time Setup:** Run `exa login` to authenticate interactively, or pipe credentials in non-interactive environments: `printf %s "$KEY" | exa accounts add work --api-key-stdin`.
+3. **Machine-Readable Outputs:** Always supply `--json` when parsing command results in scripts or LLM tool-calling loops.
+4. **Exit Codes:** Non-zero exit codes carry structured error envelopes on `stderr` with stable machine-readable codes (`no_account`, `auth_required`, `not_found`, `rate_limited`, `invalid_input`, `network`, `error`).
+5. **Contents Mode Requirement:** When using `exa contents`, at least one content mode (`--text`, `--highlights`, or `--summary`) is required.
+
+## Key Command Patterns
+
+### Web Search
+- `exa search "<query>" --json`: Natural language search.
+- `exa search "<query>" --category <cat> --highlights --json`: Filter by category (company, people, news, research paper) and excerpts.
+- `exa search "<query>" --include-domains "<domain1>,<domain2>" --text --json`: Restrict to domain whitelist and return markdown text.
+- `exa search "<query>" --type deep --summary --json`: Deep reasoning search with summary.
+
+### Content Extraction
+- `exa contents "<url1>,<url2>" --text --json`: Extract full markdown text.
+- `exa contents "<url>" --highlights --highlights-query "<q>" --json`: Extract excerpts directed by custom query.
+- `exa contents "<url>" --summary --subpages <n> --subpage-target "<keywords>" --json`: Extract summary and crawl subpages.
+
+### Answer & Similarity
+- `exa answer "<question>" --json`: Answer with web citations.
+- `exa answer "<question>" --text --json`: Answer with full citation text.
+- `exa find-similar "<url>" --num <n> --highlights --json`: Find similar web pages.
+
+### Account Management
+- `exa login [name]`: Interactively authenticate and store key in OS keystore.
+- `exa accounts list --check --json`: List all configured accounts and verify token validity.
+- `exa accounts test <name> --json`: Test account connectivity.
+
+## Error Envelopes
+
+Non-zero exit codes output structured JSON on `stderr` with `--json`:
+```json
+{
+  "error": "The API key was rejected.",
+  "code": "auth_required",
+  "detail": "HTTP 401: Unauthorized",
+  "remediation": "Set EXA_API_KEY, use --api-key <key>, or run: exa login"
+}
+```
+
+Exit codes:
+- `0`: ok
+- `1`: error (unclassified)
+- `2`: network (retry once)
+- `3`: auth_required (stop; surface remediation)
+- `4`: not_found (do not retry)
+- `5`: rate_limited (back off before retrying)
+- `6`: invalid_input (fix arguments)
+- `7`: no_account (run exa accounts list)
+
+## Documentation & Manifests
+- Full Documentation: https://spacecorps.github.io/Exa-Cli/
+- Exhaustive Agent Manual: https://spacecorps.github.io/Exa-Cli/llms-full.txt
+- A2A Agent Card: https://spacecorps.github.io/Exa-Cli/.well-known/agent-card.json
+- AgentSkills Discovery: https://spacecorps.github.io/Exa-Cli/.well-known/agent-skills/index.json

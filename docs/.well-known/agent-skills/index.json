@@ -1,0 +1,12 @@
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "exa-cli",
+      "description": "Perform natural language web search, extract clean markdown contents, discover similar pages, and generate cited answers via the Exa AI API.",
+      "type": "skill-md",
+      "url": "https://spacecorps.github.io/Exa-Cli/llms.txt",
+      "digest": "sha256:9b0e5eb73a580a45604f9ee2857e78defa7e87380cd0f00b1ea7177f0b4c4ebc"
+    }
+  ]
+}

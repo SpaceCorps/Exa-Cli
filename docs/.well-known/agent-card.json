@@ -1,0 +1,17 @@
+{
+  "name": "Exa CLI Agent",
+  "description": "Agent interface and neural web search / extraction tool for the Exa AI API.",
+  "url": "https://spacecorps.github.io/Exa-Cli/",
+  "version": "1.0.0",
+  "capabilities": ["search", "content-extraction", "similar-pages", "qa-synthesis"],
+  "skills": [
+    {
+      "name": "exa-cli",
+      "url": "https://spacecorps.github.io/Exa-Cli/llms.txt"
+    }
+  ],
+  "contact": {
+    "email": "contact@spacecorps.dev",
+    "url": "https://spacecorps.github.io/Exa-Cli/contact.html"
+  }
+}
